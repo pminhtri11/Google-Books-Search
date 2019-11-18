@@ -13,7 +13,9 @@ class Book extends React.Component {
     componentDidMount() {
         API.getBooks()
             .then(res => this.setState({ books: res.data }))
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
+            
+        console.log(this.state.books)
     };
 
     handleDeleteButton = (id) => {
