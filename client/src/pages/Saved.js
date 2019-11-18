@@ -30,7 +30,7 @@ class Book extends React.Component {
                             return (
                                 <Books
                                     key={book.id}
-                                    id={book.id}
+                                    id={book._id}
                                     title={book.title}
                                     src={book.src}
                                     href={book.href}
