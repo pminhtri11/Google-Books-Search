@@ -1,21 +1,27 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-// import Books from "./pages/Books";
-// import Detail from "./pages/Detail";
 import Search from "./pages/Search";
-import Saved from "./pages/Saved"
+import Saved from "./pages/Saved";
 import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
+import Jumbotron from "./components/Jumbotron";
+import {Col } from "./components/Grid";
 
 function App() {
   return (
     <Router>
       <div>
         <Nav />
+        <br></br>
+        <Col size="md-12">
+          <Jumbotron>
+            <h1>(React) Google Book Search</h1>
+            <p>Search for and Save book with interest</p>
+          </Jumbotron>
+        </Col>
         <Switch>
           <Route exact path="/" component={Search} />
           <Route exact path="/saved" component={Saved} />
-          {/* <Route exact path="/books/:id" component={Detail} /> */}
           <Route component={NoMatch} />
         </Switch>
       </div>

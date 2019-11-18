@@ -1,0 +1,11 @@
+.navbackground {
+    background-color: turquoise ;
+    padding: 10px;
+}
+.button{
+    margin-left: 15px;
+}
+.title{
+    font-size: 20px;
+    font-weight: bold;
+}

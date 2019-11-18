@@ -1,18 +1,17 @@
 import React from "react";
 import axios from "axios";
+import API from "../utils/API";
 import { Input, FormBtn } from "../components/Form";
-import Result from "../components/Result";
-// import API from "../utils/API";
+import { Row, Col } from "../components/Grid";
+import { BookList, Books } from "../components/BookList"
+import "./style.css";
+
+
 
 class Book extends React.Component {
     state = {
         books: [],
         search: "",
-        title: "",
-        author: "",
-        description: "",
-        image: "",
-        link: ""
     };
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -25,38 +24,83 @@ class Book extends React.Component {
         event.preventDefault();
         axios.get(`https://www.googleapis.com/books/v1/volumes?q=${this.state.search}`)
             .then(res => {
-                console.log(res.data.items)
-                this.setState({ books: res.data.items });
-                // console.log(this.state.books[0].volumeInfo.imageLinks.thumbnail)
+                console.log(res.data.items);
+                let feedback = res.data.items;
+                feedback = feedback.map(item => {
+                    item = {
+                        id: item.id,
+                        title: item.volumeInfo.title,
+                        src: item.volumeInfo.imageLinks.smallThumbnail,
+                        href: item.volumeInfo.previewLink,
+                        authors: item.volumeInfo.authors,
+                        description: item.volumeInfo.description,
+                    }
+                    return item;
+                })
+                this.setState({ books: feedback });
             });
     };
+
+    handleSaveButton = (id) => {
+        console.log(id)
+        let saved = this.state.books.filter(item => item.id === id);
+        console.log(saved[0]);
+        let bookData = saved[0];
+        API.saveBook(id, bookData).then(function () {
+            console.log("Added");
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
 
     render() {
         return (
             <div>
-                <form>
-                    <Input
-                        value={this.state.search}
-                        onChange={this.handleInputChange}
-                        name="search"
-                        placeholder="Title (required)"
-                    />
-                    <FormBtn
-                        onClick={this.handleFormSubmit}
-                    >Submit Book</FormBtn>
-                </form>
+                <Col size="md-12">
+                    <form>
+                        <Row>
+                            <Col size="md-12">
+                                <br></br>
+                                <h5><bold>Book Search</bold></h5>
+                                <Input
+                                    value={this.state.search}
+                                    onChange={this.handleInputChange}
+                                    name="search"
+                                    placeholder="Title (required)"
+                                />
 
-
-                {this.state.books ? this.state.books.map(book => {
-                    return (
-                        <Result
-                            title={book.volumeInfo.title}
-                            author={book.volumeInfo.authors}
-                            description={book.volumeInfo.description}
-                            img={book.volumeInfo.imageLinks.smallThumbnail} 
-                            />)
-                }) : <h1>no books</h1>}
-            </div>
+                                <FormBtn
+                                    onClick={this.handleFormSubmit}
+                                >Find Book</FormBtn>
+                            </Col>
+                        </Row>
+                    </form>
+                </Col>
+                <br></br>
+                <Col size="md-12">
+                    {!this.state.books ? (
+                        <h1>no books</h1>
+                    ) : (
+                            <BookList>
+                                {this.state.books.map(book => {
+                                    return (
+                                        <Books
+                                            key={book.id}
+                                            id={book.id}
+                                            title={book.title}
+                                            src={book.src}
+                                            href={book.href}
+                                            authors={book.authors}
+                                            description={book.description}
+                                            handleSaveButton={this.handleSaveButton}
+                                        />
+                                    )
+                                })}
+                            </BookList>
+                        )
+                    }
+                </Col>
+            </div >
         )
     }
 }
