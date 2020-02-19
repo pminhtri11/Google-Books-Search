@@ -1,5 +1,5 @@
 # React-Google Book Search
-Google Book Search App with Save and Delete Function
+Google Book Search App with Save and Delete Function. The application use MongoDB to store user's comments and book information, ReactDom and Express to search and save/delete books
 
 # Techologies Usage
 1.  React
